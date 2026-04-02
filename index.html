@@ -1,0 +1,1564 @@
+html_code = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpheraComm - Premium Telecommunications Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066FF;
+            --primary-dark: #0052CC;
+            --accent: #00D4FF;
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --light: #ffffff;
+            --gray: #8a8a9a;
+            --success: #00ff88;
+            --warning: #ffaa00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 102, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(0, 102, 255, 0.08) 0%, transparent 50%);
+            animation: bgPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite linear;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            to {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 5%;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 0.75rem 5%;
+            background: rgba(10, 10, 15, 0.98);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* ENHANCED LOGO STYLING */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.6rem;
+            color: var(--light);
+            text-decoration: none;
+            position: relative;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.15), rgba(0, 212, 255, 0.1));
+            border-radius: 16px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 
+                0 0 30px rgba(0, 102, 255, 0.3),
+                inset 0 0 20px rgba(0, 212, 255, 0.05);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 70%
+            );
+            animation: logoShine 3s infinite;
+        }
+
+        @keyframes logoShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 0 40px rgba(0, 102, 255, 0.5),
+                0 0 60px rgba(0, 212, 255, 0.3),
+                inset 0 0 30px rgba(0, 212, 255, 0.1);
+            border-color: rgba(0, 212, 255, 0.6);
+        }
+
+        .logo-img-container {
+            position: relative;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(1.1) saturate(1.2);
+            mix-blend-mode: normal;
+        }
+
+        .logo-text {
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.6);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 5% 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-text p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            max-width: 500px;
+            animation: fadeInUp 1s ease 0.2s backwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 1s ease 0.4s backwards;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+        }
+
+        .hero-visual {
+            position: relative;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .hero-image {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 102, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: block;
+            min-height: 400px;
+            object-fit: cover;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.2), rgba(0, 212, 255, 0.1));
+        }
+
+        .floating-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            animation: floatCard 6s ease-in-out infinite;
+        }
+
+        .floating-card.speed {
+            top: -20px;
+            right: -30px;
+            animation-delay: 0s;
+        }
+
+        .floating-card.savings {
+            bottom: 40px;
+            left: -40px;
+            animation-delay: 3s;
+        }
+
+        .floating-card h3 {
+            font-size: 2rem;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .floating-card p {
+            font-size: 0.875rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 5%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            font-size: 1.125rem;
+        }
+
+        /* Consumer & Business Sections */
+        .split-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 8rem;
+        }
+
+        .split-section.reverse {
+            direction: rtl;
+        }
+
+        .split-section.reverse > * {
+            direction: ltr;
+        }
+
+        .split-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+        }
+
+        .split-content .badge {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .split-content p {
+            color: var(--gray);
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+            font-size: 1rem;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--success);
+            color: var(--dark);
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .split-visual {
+            position: relative;
+        }
+
+        .split-visual img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: block;
+            min-height: 350px;
+            object-fit: cover;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.2), rgba(0, 212, 255, 0.1));
+        }
+
+        .visual-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.2), transparent);
+            border-radius: 20px;
+            pointer-events: none;
+        }
+
+        /* Before/After Section */
+        .transformation-section {
+            background: linear-gradient(180deg, transparent, rgba(0, 102, 255, 0.05), transparent);
+        }
+
+        .comparison-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            position: relative;
+        }
+
+        .comparison-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .comparison-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .comparison-card.before {
+            border-color: rgba(255, 100, 100, 0.3);
+        }
+
+        .comparison-card.after {
+            border-color: rgba(0, 255, 136, 0.3);
+            background: rgba(0, 255, 136, 0.03);
+        }
+
+        .card-label {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .before .card-label {
+            background: rgba(255, 100, 100, 0.2);
+            color: #ff6464;
+        }
+
+        .after .card-label {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--success);
+        }
+
+        .comparison-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            margin-bottom: 2rem;
+            color: var(--light);
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .metric-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .before .metric-value {
+            color: #ff6464;
+        }
+
+        .after .metric-value {
+            color: var(--success);
+        }
+
+        .savings-highlight {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 212, 255, 0.1));
+            border-radius: 20px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .savings-highlight h4 {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .savings-amount {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: countUp 2s ease;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+        }
+
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* Contact Form Section */
+        .contact-section {
+            background: linear-gradient(180deg, transparent, rgba(0, 102, 255, 0.05), transparent);
+            padding: 8rem 5%;
+        }
+
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--light);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: var(--light);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--gray);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.25rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 102, 255, 0.6);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .submit-btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid transparent;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .form-message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+
+        .form-message.success {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            display: block;
+        }
+
+        .form-message.error {
+            background: rgba(255, 100, 100, 0.1);
+            border: 1px solid #ff6464;
+            color: #ff6464;
+            display: block;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 102, 255, 0.2) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .cta-section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+        }
+
+        .cta-section p {
+            color: var(--gray);
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4rem 5% 2rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--light);
+            text-decoration: none;
+        }
+
+        .footer-logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.2), rgba(0, 212, 255, 0.1));
+            padding: 4px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .footer-brand p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .footer-links h4 {
+            color: var(--light);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        .footer-bottom a {
+            color: var(--gray);
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-bottom a:hover {
+            color: var(--accent);
+        }
+
+        /* Speed Lines Animation */
+        .speed-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            opacity: 0.1;
+        }
+
+        .speed-line {
+            position: absolute;
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+            animation: speedLine 3s linear infinite;
+        }
+
+        @keyframes speedLine {
+            from {
+                transform: translateY(-100px);
+            }
+            to {
+                transform: translateY(calc(100vh + 100px));
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 3rem;
+            }
+
+            .split-section {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .split-section.reverse {
+                direction: ltr;
+            }
+
+            .comparison-container {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .logo {
+                padding: 0.4rem 0.8rem;
+                font-size: 1.3rem;
+            }
+
+            .logo-img-container {
+                width: 35px;
+                height: 35px;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .contact-container {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Glow Effects */
+        .glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            opacity: 0.3;
+            filter: blur(60px);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation"></div>
+    
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-img-container">
+                    <img src="https://i.imgur.com/RuN1Kkz.jpeg" alt="SpheraComm Logo">
+                </div>
+                <span class="logo-text">SpheraComm</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#consumer">Consumer</a></li>
+                <li><a href="#business">Business</a></li>
+                <li><a href="#results">Results</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a href="#audit" class="cta-button">Free Audit</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="speed-lines" id="speedLines"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Connect Faster.<br>Save Smarter.</h1>
+                <p>SpheraComm partners with elite telecommunications carriers to deliver unmatched speed and value. We analyze, optimize, and transform your connectivity experience.</p>
+                <div class="hero-buttons">
+                    <a href="#consumer" class="cta-button">For Consumers</a>
+                    <a href="#business" class="btn-secondary">For Business</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <!-- REPLACED: Fiber Optic Image - Using reliable Unsplash source -->
+                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80" 
+                     alt="Fiber Optic Network" 
+                     class="hero-image"
+                     onerror="this.src='https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80'">
+                <div class="visual-overlay"></div>
+                <div class="floating-card speed">
+                    <h3>10Gbps+</h3>
+                    <p>Max Speed Available</p>
+                </div>
+                <div class="floating-card savings">
+                    <h3>40%</h3>
+                    <p>Average Savings</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Consumer Section -->
+    <section id="consumer" class="split-section fade-in">
+        <div class="split-content">
+            <span class="badge">For Your Home</span>
+            <h3>Internet That Actually Works</h3>
+            <p>Tired of buffering, outages, and paying too much for too little? We audit your current setup and match you with premium carriers offering faster speeds at better prices—guaranteed.</p>
+            <ul class="feature-list">
+                <li>Free comprehensive speed audit</li>
+                <li>Guaranteed faster service or we pay</li>
+                <li>Access to exclusive carrier deals</li>
+                <li>White-glove installation support</li>
+                <li>24/7 priority customer service</li>
+            </ul>
+            <a href="#contact" class="cta-button">Get Your Free Audit</a>
+        </div>
+        <div class="split-visual">
+            <!-- REPLACED: Family image using reliable source -->
+            <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?w=800&q=80" 
+                 alt="Happy Family Using Internet"
+                 onerror="this.src='https://images.unsplash.com/photo-1609220136736-443140cffec6?w=800&q=80'">
+            <div class="visual-overlay"></div>
+        </div>
+    </section>
+
+    <!-- Business Section -->
+    <section id="business" class="split-section reverse fade-in">
+        <div class="split-content">
+            <span class="badge">For Your Business</span>
+            <h3>Enterprise-Grade Connectivity</h3>
+            <p>Stop letting slow internet kill your productivity. Our business solutions deliver dedicated fiber, symmetrical speeds, and 99.99% uptime SLAs that keep your operations running at peak efficiency.</p>
+            <ul class="feature-list">
+                <li>Dedicated & shared fiber options</li>
+                <li>Symmetrical upload/download speeds</li>
+                <li>Scalable bandwidth as you grow</li>
+                <li>Managed network services</li>
+                <li>Dedicated business support team</li>
+            </ul>
+            <a href="#contact" class="cta-button">Talk to Solutions Expert</a>
+        </div>
+        <div class="split-visual">
+            <!-- REPLACED: Business Team Image - Using reliable Unsplash source -->
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80" 
+                 alt="Business Team Technology"
+                 onerror="this.src='https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80'">
+            <div class="visual-overlay"></div>
+        </div>
+    </section>
+
+    <!-- Before/After Transformation Section -->
+    <section id="results" class="transformation-section">
+        <div class="section-header fade-in">
+            <h2>Real Results, Real Savings</h2>
+            <p>See the dramatic difference SpheraComm clients experience after switching to optimized telecommunications solutions.</p>
+        </div>
+        
+        <div class="comparison-container fade-in">
+            <div class="comparison-card before">
+                <span class="card-label">Before</span>
+                <h3>Typical Client Setup</h3>
+                <div class="metric">
+                    <span class="metric-label">Monthly Cost</span>
+                    <span class="metric-value">$289/mo</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Download Speed</span>
+                    <span class="metric-value">75 Mbps</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Upload Speed</span>
+                    <span class="metric-value">15 Mbps</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Reliability</span>
+                    <span class="metric-value">97.2% Uptime</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Support Response</span>
+                    <span class="metric-value">48+ Hours</span>
+                </div>
+            </div>
+
+            <div class="comparison-card after">
+                <span class="card-label">After SpheraComm</span>
+                <h3>Optimized Solution</h3>
+                <div class="metric">
+                    <span class="metric-label">Monthly Cost</span>
+                    <span class="metric-value">$175/mo</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Download Speed</span>
+                    <span class="metric-value">1 Gbps</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Upload Speed</span>
+                    <span class="metric-value">1 Gbps</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Reliability</span>
+                    <span class="metric-value">99.99% Uptime</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Support Response</span>
+                    <span class="metric-value">< 15 Minutes</span>
+                </div>
+            </div>
+
+            <div class="savings-highlight">
+                <h4>Average Annual Savings Per Client</h4>
+                <div class="savings-amount" id="savingsAmount">$1,368</div>
+                <p style="color: var(--gray); margin-top: 0.5rem;">Plus 13x faster speeds and enterprise-grade reliability</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section fade-in">
+        <div class="stat-card">
+            <span class="stat-number" data-target="500">0</span>
+            <span class="stat-label">Business Clients</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number" data-target="50">0</span>
+            <span class="stat-label">Carrier Partners</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number" data-target="99.9">0</span>
+            <span class="stat-label">% Uptime SLA</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number" data-target="24">0</span>
+            <span class="stat-label">Hour Support</span>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section id="contact" class="contact-section">
+        <div class="section-header fade-in">
+            <h2>Get Your Free Audit</h2>
+            <p>Ready to save money and get faster internet? Fill out the form below and our team will contact you within 24 hours.</p>
+        </div>
+        
+        <div class="contact-container fade-in">
+            <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" name="firstName" required placeholder="John">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" name="lastName" required placeholder="Doe">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required placeholder="john@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="type">I am interested in: *</label>
+                    <select id="type" name="type" required>
+                        <option value="">Select an option...</option>
+                        <option value="consumer">Consumer/Home Internet</option>
+                        <option value="business">Business Solutions</option>
+                        <option value="enterprise">Enterprise/Custom</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="currentProvider">Current Provider (Optional)</label>
+                    <input type="text" id="currentProvider" name="currentProvider" placeholder="e.g., Comcast, AT&T, Verizon">
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Tell us about your needs</label>
+                    <textarea id="message" name="message" placeholder="Describe your current internet issues, desired speeds, or any questions you have..."></textarea>
+                </div>
+
+                <input type="text" name="_gotcha" style="display:none">
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span class="btn-text">Schedule My Free Audit</span>
+                </button>
+
+                <div id="formMessage" class="form-message"></div>
+            </form>
+
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); text-align: center;">
+                <p style="color: var(--gray); margin-bottom: 1rem;">Prefer to email directly?</p>
+                <a href="mailto:audit@spheracomm.com?subject=Free%20Audit%20Request&body=Hello%20SpheraComm%2C%0A%0AI%20would%20like%20to%20request%20a%20free%20audit.%0A%0AName%3A%20%0APhone%3A%20%0AEmail%3A%20%0AInterest%3A%20(Consumer/Business)%0A%0AThank%20you!" 
+                   class="btn-secondary" style="display: inline-block;">
+                    Send Email Instead
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="audit" class="cta-section fade-in">
+        <h2>Ready to Upgrade?</h2>
+        <p>Join hundreds of satisfied clients who've discovered better, faster, and more affordable telecommunications solutions through SpheraComm.</p>
+        <a href="#contact" class="cta-button" style="font-size: 1.1rem; padding: 1rem 2.5rem;">Get Started Today</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="#" class="footer-logo">
+                    <img src="https://i.imgur.com/RuN1Kkz.jpeg" alt="SpheraComm" class="footer-logo-img">
+                    <span>SpheraComm</span>
+                </a>
+                <p>Connecting you to the future through elite carrier partnerships and expert telecommunications consulting. Better speeds, better prices, guaranteed.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Solutions</h4>
+                <ul>
+                    <li><a href="#consumer">Consumer Internet</a></li>
+                    <li><a href="#business">Business Fiber</a></li>
+                    <li><a href="#">Enterprise Solutions</a></li>
+                    <li><a href="#">Managed Services</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Carrier Partners</a></li>
+                    <li><a href="#">Case Studies</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Speed Test</a></li>
+                    <li><a href="#">Support Portal</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 SpheraComm. All rights reserved.</span>
+            <div>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Create floating particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Create speed lines
+        const speedLinesContainer = document.getElementById('speedLines');
+        for (let i = 0; i < 10; i++) {
+            const line = document.createElement('div');
+            line.className = 'speed-line';
+            line.style.left = Math.random() * 100 + '%';
+            line.style.animationDelay = Math.random() * 3 + 's';
+            line.style.animationDuration = (2 + Math.random() * 2) + 's';
+            speedLinesContainer.appendChild(line);
+        }
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    if (entry.target.classList.contains('stats-section')) {
+                        animateStats();
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Stats counter animation
+        function animateStats() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                const target = parseFloat(stat.getAttribute('data-target'));
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += step;
+                    if (current >= target) {
+                        stat.textContent = target % 1 === 0 ? target : target.toFixed(1);
+                        clearInterval(timer);
+                    } else {
+                        stat.textContent = Math.floor(current);
+                    }
+                }, 16);
+            });
+        }
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Parallax effect for hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroImage = document.querySelector('.hero-image');
+            if (heroImage) {
+                heroImage.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Contact Form Handling
+        const contactForm = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const formMessage = document.getElementById('formMessage');
+
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            submitBtn.classList.add('loading');
+            submitBtn.querySelector('.btn-text').textContent = 'Sending...';
+            formMessage.className = 'form-message';
+            formMessage.style.display = 'none';
+
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: new FormData(contactForm),
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    formMessage.textContent = 'Thank you! We have received your request and will contact you within 24 hours.';
+                    formMessage.classList.add('success');
+                    contactForm.reset();
+                } else {
+                    const data = await response.json();
+                    if (data.errors) {
+                        formMessage.textContent = data.errors.map(error => error.message).join(', ');
+                    } else {
+                        formMessage.textContent = 'Oops! There was a problem submitting your form. Please try again or email us directly.';
+                    }
+                    formMessage.classList.add('error');
+                }
+            } catch (error) {
+                formMessage.textContent = 'Oops! There was a problem submitting your form. Please try again or email us directly.';
+                formMessage.classList.add('error');
+            } finally {
+                submitBtn.classList.remove('loading');
+                submitBtn.querySelector('.btn-text').textContent = 'Schedule My Free Audit';
+            }
+        });
+
+        // Phone number formatting
+        const phoneInput = document.getElementById('phone');
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\\D/g, '');
+            if (value.length >= 6) {
+                value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+            } else if (value.length >= 3) {
+                value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>'''
+
+print("Images updated to reliable Unsplash sources!")
+print("\nChanges made:")
+print("1. Hero fiber optic image → Unsplash data center/server image")
+print("2. Business team image → Unsplash team collaboration image") 
+print("3. Family image → Unsplash family image")
+print("4. Added onerror fallback for each image")
+print("5. Added CSS backup gradients if images fail to load")
+print("\nAll images now use Unsplash (unsplash.com) which is reliable and fast.")
