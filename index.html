@@ -1422,56 +1422,48 @@
                 <a href="mailto:info@spheracomm.com">info@spheracomm.com</a>
             </div>
             <form id="contactForm" action="https://formspree.io/f/xreoalvl" method="POST">
-    <div class="form-row">
-        <div class="form-group">
-            <label for="firstName">First Name *</label>
-            <input type="text" id="firstName" name="firstName" required placeholder="John">
-        </div>
-        <div class="form-group">
-            <label for="lastName">Last Name *</label>
-            <input type="text" id="lastName" name="lastName" required placeholder="Doe">
-        </div>
-    </div>
-
-    <div class="form-row">
-        <div class="form-group">
-            <label for="email">Email Address *</label>
-            <input type="email" id="email" name="email" required placeholder="john@example.com">
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone Number *</label>
-            <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="type">I am interested in: *</label>
-        <select id="type" name="serviceType" required>
-            <option value="">Select an option...</option>
-            <option value="consumer">Consumer/Home Internet</option>
-            <option value="business">Business Solutions</option>
-            <option value="enterprise">Enterprise/Custom</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="currentProvider">Current Provider (Optional)</label>
-        <input type="text" id="currentProvider" name="currentProvider" placeholder="e.g., Comcast, AT&T, Verizon">
-    </div>
-
-    <div class="form-group">
-        <label for="message">Tell us about your needs</label>
-        <textarea id="message" name="message" placeholder="Describe your current internet issues, desired speeds, or any questions you have..."></textarea>
-    </div>
-
-    <input type="hidden" name="_subject" value="New SpheraComm Audit Request">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="text" name="_gotcha" style="display:none">
-
-    <button type="submit" class="submit-btn">
-        <span class="btn-text">Schedule My Free Audit</span>
-    </button>
-</form>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" name="firstName" required placeholder="John">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" name="lastName" required placeholder="Doe">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required placeholder="john@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="type">I am interested in: *</label>
+                    <select id="type" name="serviceType" required>
+                        <option value="">Select an option...</option>
+                        <option value="consumer">Consumer/Home Internet</option>
+                        <option value="business">Business Solutions</option>
+                        <option value="enterprise">Enterprise/Custom</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="currentProvider">Current Provider (Optional)</label>
+                    <input type="text" id="currentProvider" name="currentProvider" placeholder="e.g., Comcast, AT&T, Verizon">
+                </div>
+                <div class="form-group">
+                    <label for="message">Tell us about your needs</label>
+                    <textarea id="message" name="message" placeholder="Describe your current internet issues, desired speeds, or any questions you have..."></textarea>
+                </div>
+                <input type="hidden" name="_subject" value="New SpheraComm Audit Request">
+                <input type="text" name="_gotcha" style="display:none">
+                <button type="submit" class="submit-btn" id="submitBtn"><span class="btn-text">Schedule My Free Audit</span></button>
+                <div id="formMessage" class="form-message"></div>
+            </form>
             <div style="margin-top:1.75rem;padding-top:1.75rem;border-top:1px solid rgba(255,255,255,0.1);text-align:center;">
                 <p style="color:var(--gray);margin-bottom:0.75rem;font-size:0.95rem;">Prefer to email?</p>
                 <a href="mailto:info@spheracomm.com?subject=Free%20Audit%20Request" class="btn-secondary" style="display:inline-block;font-size:0.95rem;padding:0.7rem 1.5rem;">Send Email to info@spheracomm.com</a>
@@ -1582,55 +1574,6 @@
             if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });
-
-    // ========== CONTACT FORM ==========
-    const contactForm = document.getElementById('contactForm');
-    contactForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        const msg = document.getElementById('formMessage');
-        msg.className = 'form-message';
-
-        if (contactForm.dataset.placeholderAction === 'true') {
-            msg.textContent = 'Replace YOUR_FORM_ID with your real Formspree form ID before using this form.';
-            msg.classList.add('error');
-            return;
-        }
-
-        btn.disabled = true;
-        btn.querySelector('.btn-text').textContent = 'Sending...';
-
-        try {
-            const res = await fetch(contactForm.action, {
-                method: 'POST',
-                body: new FormData(contactForm),
-                headers: { 'Accept': 'application/json' }
-            });
-            if (res.ok) {
-                msg.textContent = 'Thank you! We\'ll contact you within 24 hours.';
-                msg.classList.add('success');
-                contactForm.reset();
-            } else {
-                msg.textContent = 'There was a problem. Please email info@spheracomm.com directly.';
-                msg.classList.add('error');
-            }
-        } catch {
-            msg.textContent = 'There was a problem. Please email info@spheracomm.com directly.';
-            msg.classList.add('error');
-        } finally {
-            btn.disabled = false;
-            btn.querySelector('.btn-text').textContent = 'Schedule My Free Audit';
-        }
-    });
-
-    const phoneInput = document.getElementById('phone');
-    phoneInput.addEventListener('input', function(e) {
-        let v = e.target.value.replace(/\D/g, '');
-        if (v.length >= 6) v = `(${v.slice(0,3)}) ${v.slice(3,6)}-${v.slice(6,10)}`;
-        else if (v.length >= 3) v = `(${v.slice(0,3)}) ${v.slice(3)}`;
-        e.target.value = v;
-    });
-
     // ========== FAQ ACCORDION ==========
     const faqItems = document.querySelectorAll('.faq-item');
     faqItems.forEach((item) => {
