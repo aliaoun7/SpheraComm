@@ -898,6 +898,13 @@
             box-shadow: 0 6px 25px rgba(0, 102, 255, 0.6);
         }
 
+        .submit-btn:disabled {
+            opacity: 0.75;
+            cursor: wait;
+            transform: none;
+            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.25);
+        }
+
         .form-message {
             margin-top: 1rem;
             padding: 1rem;
@@ -1421,7 +1428,7 @@
                 <p>Email us directly at:</p>
                 <a href="mailto:info@spheracomm.com">info@spheracomm.com</a>
             </div>
-            <form id="contactForm" action="https://formspree.io/f/xreoalvl" method="POST">
+            <form id="contactForm" action="https://formspree.io/f/xreoalvl" method="POST" novalidate>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="firstName">First Name *</label>
@@ -1460,9 +1467,10 @@
                     <textarea id="message" name="message" placeholder="Describe your current internet issues, desired speeds, or any questions you have..."></textarea>
                 </div>
                 <input type="hidden" name="_subject" value="New SpheraComm Audit Request">
-                <input type="text" name="_gotcha" style="display:none">
+                <input type="hidden" name="_replyto" value="email">
+                <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
                 <button type="submit" class="submit-btn" id="submitBtn"><span class="btn-text">Schedule My Free Audit</span></button>
-                <div id="formMessage" class="form-message"></div>
+                <div id="formMessage" class="form-message" role="status" aria-live="polite"></div>
             </form>
             <div style="margin-top:1.75rem;padding-top:1.75rem;border-top:1px solid rgba(255,255,255,0.1);text-align:center;">
                 <p style="color:var(--gray);margin-bottom:0.75rem;font-size:0.95rem;">Prefer to email?</p>
@@ -1591,6 +1599,54 @@
                 if (answer) answer.style.maxHeight = answer.scrollHeight + 'px';
             }
         });
+    });
+
+    // ========== INLINE FORMSPREE SUBMIT ==========
+    const contactForm = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const formMessage = document.getElementById('formMessage');
+    const btnText = submitBtn?.querySelector('.btn-text');
+
+    function showFormMessage(type, message) {
+        if (!formMessage) return;
+        formMessage.className = `form-message ${type}`;
+        formMessage.textContent = message;
+    }
+
+    contactForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!contactForm.reportValidity()) return;
+
+        const originalText = btnText ? btnText.textContent : 'Schedule My Free Audit';
+        if (submitBtn) submitBtn.disabled = true;
+        if (btnText) btnText.textContent = 'Submitting...';
+        showFormMessage('', '');
+        formMessage.style.display = 'none';
+
+        try {
+            const response = await fetch(contactForm.action, {
+                method: 'POST',
+                body: new FormData(contactForm),
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            const data = await response.json().catch(() => ({}));
+
+            if (response.ok) {
+                contactForm.reset();
+                showFormMessage('success', 'Audit request received. A SpheraComm specialist will reach out shortly.');
+            } else {
+                const errorMessage = data?.errors?.map(err => err.message).join(' ') || 'There was a problem submitting your request. Please try again or email info@spheracomm.com.';
+                showFormMessage('error', errorMessage);
+            }
+        } catch (error) {
+            showFormMessage('error', 'There was a problem submitting your request. Please try again or email info@spheracomm.com.');
+        } finally {
+            if (submitBtn) submitBtn.disabled = false;
+            if (btnText) btnText.textContent = originalText;
+        }
     });
     </script>
 </body>
