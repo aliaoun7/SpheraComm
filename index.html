@@ -1598,8 +1598,8 @@
         if (window.ndt7) return window.ndt7;
 
         const sources = [
-            'https://cdn.jsdelivr.net/npm/@m-lab/ndt7@0.0.6',
-            'https://unpkg.com/@m-lab/ndt7@0.0.6'
+            'https://cdn.jsdelivr.net/npm/@m-lab/ndt7@0.1.4',
+            'https://unpkg.com/@m-lab/ndt7@0.1.4'
         ];
 
         let lastError;
@@ -1654,7 +1654,7 @@
             let minRTT = Infinity;
 
             await ndt7.test(
-                { metadata: { client_name: 'SpheraComm-SpeedTest', client_version: '1.0.2' }, userAcceptedDataPolicy: true },
+                { metadata: { client_name: 'SpheraComm-SpeedTest', client_version: '1.0.3' }, userAcceptedDataPolicy: true },
                 {
                     serverDiscovery: () => {
                         setPhase('locate');
