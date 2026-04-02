@@ -646,6 +646,40 @@
         .phase-dot.active { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
         .phase-dot.done { background: var(--success); }
 
+        .mlab-consent {
+            margin-top: 1.25rem;
+            text-align: left;
+            padding: 1rem 1.1rem;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .mlab-consent-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            color: var(--gray);
+            font-size: 0.92rem;
+            line-height: 1.55;
+            cursor: pointer;
+        }
+
+        .mlab-consent-label input {
+            margin-top: 0.2rem;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .mlab-consent-label a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .mlab-consent-label a:hover { text-decoration: underline; }
+
         /* ===== REST OF SITE ===== */
         .transformation-section {
             background: linear-gradient(180deg, transparent, rgba(0, 102, 255, 0.05), transparent);
@@ -1205,6 +1239,13 @@
 
             <button class="speedtest-btn" id="speedtestBtn" onclick="startTest()">Start Speed Test</button>
 
+            <div class="mlab-consent" id="mlabConsentWrap">
+                <label class="mlab-consent-label">
+                    <input type="checkbox" id="mlabConsent" />
+                    <span>I understand this speed test uses Measurement Lab and that my public IP address and test results may be logged and published openly according to M-Lab's <a href="https://www.measurementlab.net/privacy/" target="_blank" rel="noopener">privacy policy</a>.</span>
+                </label>
+            </div>
+
             <div class="speed-status" id="speedStatus"></div>
 
             <div class="speed-details" id="speedDetails" style="display:none;">
@@ -1577,6 +1618,18 @@
 
     async function startTest() {
         if (isTesting) return;
+
+        const consentBox = document.getElementById('mlabConsent');
+        if (!consentBox || !consentBox.checked) {
+            resetUI();
+            document.getElementById('phaseIndicator').style.display = 'none';
+            setStatus('Please confirm the M-Lab privacy notice before running the speed test.', 'error');
+            document.getElementById('speedValue').textContent = '--';
+            document.getElementById('speedUnit').textContent = 'Mbps';
+            document.getElementById('speedLabel').textContent = 'Consent Required';
+            return;
+        }
+
         isTesting = true;
 
         const btn = document.getElementById('speedtestBtn');
@@ -1601,7 +1654,7 @@
             let minRTT = Infinity;
 
             await ndt7.test(
-                { metadata: { client_name: 'SpheraComm-SpeedTest', client_version: '1.0.1' } },
+                { metadata: { client_name: 'SpheraComm-SpeedTest', client_version: '1.0.2' }, userAcceptedDataPolicy: true },
                 {
                     serverDiscovery: () => {
                         setPhase('locate');
