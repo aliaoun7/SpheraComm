@@ -1281,7 +1281,7 @@
                 <p>Email us directly at:</p>
                 <a href="mailto:info@spheracomm.com">info@spheracomm.com</a>
             </div>
-            <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+            <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" data-placeholder-action="true" method="POST">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="firstName">First Name *</label>
@@ -1323,6 +1323,9 @@
                 <button type="submit" class="submit-btn" id="submitBtn"><span class="btn-text">Schedule My Free Audit</span></button>
                 <div id="formMessage" class="form-message"></div>
             </form>
+            <p id="formSetupNote" style="display:none;margin-top:1rem;color:#ffb86b;font-size:0.9rem;text-align:center;">
+                Update the Formspree form ID before going live so audit requests are delivered correctly.
+            </p>
             <div style="margin-top:1.75rem;padding-top:1.75rem;border-top:1px solid rgba(255,255,255,0.1);text-align:center;">
                 <p style="color:var(--gray);margin-bottom:0.75rem;font-size:0.95rem;">Prefer to email?</p>
                 <a href="mailto:info@spheracomm.com?subject=Free%20Audit%20Request" class="btn-secondary" style="display:inline-block;font-size:0.95rem;padding:0.7rem 1.5rem;">Send Email to info@spheracomm.com</a>
@@ -1436,13 +1439,25 @@
 
     // ========== CONTACT FORM ==========
     const contactForm = document.getElementById('contactForm');
+    const formSetupNote = document.getElementById('formSetupNote');
+    if (contactForm.dataset.placeholderAction === 'true') {
+        formSetupNote.style.display = 'block';
+    }
+
     contactForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         const msg = document.getElementById('formMessage');
+        msg.className = 'form-message';
+
+        if (contactForm.dataset.placeholderAction === 'true') {
+            msg.textContent = 'Replace YOUR_FORM_ID with your real Formspree form ID before using this form.';
+            msg.classList.add('error');
+            return;
+        }
+
         btn.disabled = true;
         btn.querySelector('.btn-text').textContent = 'Sending...';
-        msg.className = 'form-message';
 
         try {
             const res = await fetch(contactForm.action, {
@@ -1515,15 +1530,49 @@
         el.className = 'speed-status ' + type;
     }
 
-    function loadNDT7Library() {
+    async function loadScript(url) {
         return new Promise((resolve, reject) => {
-            if (window.ndt7) return resolve(window.ndt7);
+            const existing = document.querySelector(`script[data-ndt7-url="${url}"]`);
+            if (existing && window.ndt7) return resolve(window.ndt7);
+            if (existing) {
+                existing.addEventListener('load', () => resolve(window.ndt7));
+                existing.addEventListener('error', () => reject(new Error('Failed to load ' + url)));
+                return;
+            }
+
             const s = document.createElement('script');
-            s.src = 'https://cdn.jsdelivr.net/npm/@m-lab/ndt7@1.0.1/ndt7.js';
-            s.onload = () => { if (window.ndt7) resolve(window.ndt7); else reject(new Error('ndt7 library loaded but not found on window.')); };
-            s.onerror = () => reject(new Error('Could not load the NDT7 speed test library. Check your internet connection.'));
+            s.src = url;
+            s.async = true;
+            s.dataset.ndt7Url = url;
+            s.onload = () => {
+                if (window.ndt7) resolve(window.ndt7);
+                else reject(new Error('NDT7 loaded but did not expose the browser client.'));
+            };
+            s.onerror = () => reject(new Error('Failed to load ' + url));
             document.head.appendChild(s);
         });
+    }
+
+    async function loadNDT7Library() {
+        if (window.ndt7) return window.ndt7;
+
+        const sources = [
+            'https://cdn.jsdelivr.net/npm/@m-lab/ndt7@0.0.6',
+            'https://unpkg.com/@m-lab/ndt7@0.0.6'
+        ];
+
+        let lastError;
+        for (const url of sources) {
+            try {
+                const lib = await loadScript(url);
+                if (lib) return lib;
+            } catch (err) {
+                lastError = err;
+                console.warn('[SpeedTest] NDT7 source failed:', url, err);
+            }
+        }
+
+        throw new Error('Could not load the NDT7 speed test library. Please try again in a moment.');
     }
 
     async function startTest() {
@@ -1545,50 +1594,64 @@
 
             setStatus('Finding nearest server…', 'testing');
 
-            let downloadSamples = [], uploadSamples = [];
-            let downloadResult = 0, uploadResult = 0;
+            let downloadSamples = [];
+            let uploadSamples = [];
+            let downloadResult = 0;
+            let uploadResult = 0;
             let minRTT = Infinity;
 
             await ndt7.test(
-                { metadata: { client_name: 'SpheraComm-SpeedTest', client_version: '1.0.0' } },
+                { metadata: { client_name: 'SpheraComm-SpeedTest', client_version: '1.0.1' } },
                 {
+                    serverDiscovery: () => {
+                        setPhase('locate');
+                        setStatus('Finding nearest server…', 'testing');
+                        document.getElementById('speedLabel').textContent = 'Locating…';
+                    },
+                    serverChosen: () => {
+                        setPhase('latency');
+                        setStatus('Checking latency…', 'testing');
+                        document.getElementById('speedLabel').textContent = 'Latency…';
+                    },
                     downloadStart: () => {
                         setPhase('download');
-                        setStatus('Testing download speed… (10 sec)', 'testing');
+                        setStatus('Testing download speed…', 'testing');
                         document.getElementById('speedLabel').textContent = 'Downloading…';
                         setGauge(0);
                     },
                     downloadMeasurement: (data) => {
-                        if (data.Source === 'client' && data.Data && data.Data.MeanClientMbps) {
+                        if (data?.Source === 'client' && data?.Data?.MeanClientMbps) {
                             downloadSamples.push(data.Data.MeanClientMbps);
                             const display = smoothedValue(downloadSamples);
                             document.getElementById('speedValue').textContent = display.toFixed(1);
                             setGauge(display);
                         }
-                        if (data.Source === 'server' && data.Data && data.Data.TCPInfo && data.Data.TCPInfo.RTT) {
+                        if (data?.Source === 'server' && data?.Data?.TCPInfo?.RTT) {
                             minRTT = Math.min(minRTT, data.Data.TCPInfo.RTT);
+                            document.getElementById('latency').textContent = Math.max(1, Math.round(minRTT / 1000)) + ' ms';
                         }
                     },
                     downloadComplete: (data) => {
-                        downloadResult = (data && data.LastClientMeasurement && data.LastClientMeasurement.MeanClientMbps)
+                        downloadResult = (data?.LastClientMeasurement?.MeanClientMbps)
                             ? data.LastClientMeasurement.MeanClientMbps
                             : (downloadSamples.length ? percentile90(downloadSamples) : 0);
                         document.getElementById('downloadSpeed').textContent = downloadResult.toFixed(1) + ' Mbps';
                         document.getElementById('speedValue').textContent = downloadResult.toFixed(1);
+                        document.getElementById('speedLabel').textContent = 'Download';
                         setGauge(downloadResult);
                         if (minRTT !== Infinity) {
-                            document.getElementById('latency').textContent = Math.round(minRTT / 1000) + ' ms';
+                            document.getElementById('latency').textContent = Math.max(1, Math.round(minRTT / 1000)) + ' ms';
                         }
                     },
                     uploadStart: () => {
                         setPhase('upload');
-                        setStatus('Testing upload speed… (10 sec)', 'testing');
+                        setStatus('Testing upload speed…', 'testing');
                         document.getElementById('speedLabel').textContent = 'Uploading…';
+                        document.getElementById('speedValue').textContent = '0.0';
                         setGauge(0);
-                        document.getElementById('speedValue').textContent = '0';
                     },
                     uploadMeasurement: (data) => {
-                        if (data.Source === 'client' && data.Data && data.Data.MeanClientMbps) {
+                        if (data?.Source === 'client' && data?.Data?.MeanClientMbps) {
                             uploadSamples.push(data.Data.MeanClientMbps);
                             const display = smoothedValue(uploadSamples);
                             document.getElementById('speedValue').textContent = display.toFixed(1);
@@ -1596,12 +1659,14 @@
                         }
                     },
                     uploadComplete: (data) => {
-                        uploadResult = (data && data.LastClientMeasurement && data.LastClientMeasurement.MeanClientMbps)
+                        uploadResult = (data?.LastClientMeasurement?.MeanClientMbps)
                             ? data.LastClientMeasurement.MeanClientMbps
                             : (uploadSamples.length ? percentile90(uploadSamples) : 0);
                         document.getElementById('uploadSpeed').textContent = uploadResult.toFixed(1) + ' Mbps';
                     },
-                    error: (err) => { throw new Error(String(err)); },
+                    error: (err) => {
+                        throw (err instanceof Error ? err : new Error(String(err)));
+                    }
                 }
             );
 
@@ -1611,18 +1676,21 @@
             setGauge(downloadResult);
             document.getElementById('speedDetails').style.display = 'grid';
             setStatus('✓ Speed test complete!', 'complete');
-            PHASES.forEach(p => { document.getElementById('dot-' + p).className = 'phase-dot done'; });
-
+            PHASES.forEach(p => {
+                document.getElementById('dot-' + p).className = 'phase-dot done';
+            });
         } catch (err) {
-            setStatus('⚠ ' + (err.message || 'Test failed — please try again.'), 'error');
+            const message = err?.message || 'Test failed — please try again.';
+            setStatus('⚠ ' + message, 'error');
             document.getElementById('speedValue').textContent = '!';
+            document.getElementById('speedUnit').textContent = '';
             document.getElementById('speedLabel').textContent = 'Failed';
             console.error('[SpeedTest]', err);
+        } finally {
+            isTesting = false;
+            btn.disabled = false;
+            btn.textContent = 'Test Again';
         }
-
-        isTesting = false;
-        btn.disabled = false;
-        btn.textContent = 'Test Again';
     }
 
     function smoothedValue(samples) {
