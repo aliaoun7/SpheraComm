@@ -1475,58 +1475,37 @@
         e.target.value = v;
     });
 
-    // ========== ACCURATE SPEED TEST (NDT7 via M-Lab) ==========
-    // Uses Measurement Lab NDT7 — same infrastructure as Google's speed test.
-    // Locate API is fetched server-side; WebSockets go direct to M-Lab servers.
+    // ========== ACCURATE SPEED TEST ==========
+    // Uses M-Lab's official ndt7-js library (same backend as Google's speed test).
+    // The library handles locate API + access-token-signed WebSocket URLs automatically.
 
     let isTesting = false;
-    const MAX_GAUGE = 1000; // Mbps — full gauge = 1 Gbps
-
-    // Known M-Lab NDT7 servers as fallbacks if locate API fails
-    const FALLBACK_SERVERS = [
-        'ndt-iupui-mlab1-ord05.mlab-oti.measurement-lab.org',
-        'ndt-iupui-mlab1-lga05.mlab-oti.measurement-lab.org',
-        'ndt-iupui-mlab1-dfw05.mlab-oti.measurement-lab.org',
-        'ndt-iupui-mlab1-sea05.mlab-oti.measurement-lab.org',
-        'ndt-iupui-mlab1-atl05.mlab-oti.measurement-lab.org',
-    ];
-
-    function buildNDT7URLs(hostname) {
-        return {
-            download: `wss://${hostname}:443/ndt/v7/download`,
-            upload:   `wss://${hostname}:443/ndt/v7/upload`,
-        };
-    }
+    const MAX_GAUGE = 1000;
+    const PHASES = ['locate','latency','download','upload'];
 
     function setGauge(mbps) {
         const fraction = Math.min(mbps / MAX_GAUGE, 1);
-        const circumference = 565;
-        document.getElementById('gaugeFill').style.strokeDashoffset = circumference - (circumference * fraction);
+        document.getElementById('gaugeFill').style.strokeDashoffset = 565 - (565 * fraction);
     }
 
-    const PHASES = ['locate','latency','download','upload'];
     function setPhase(name) {
         PHASES.forEach(p => {
             const dot = document.getElementById('dot-' + p);
             if (!dot) return;
-            const idx = PHASES.indexOf(p);
-            const cur = PHASES.indexOf(name);
-            if (idx < cur)       dot.className = 'phase-dot done';
-            else if (idx === cur) dot.className = 'phase-dot active';
-            else                  dot.className = 'phase-dot';
+            const idx = PHASES.indexOf(p), cur = PHASES.indexOf(name);
+            dot.className = 'phase-dot' + (idx < cur ? ' done' : idx === cur ? ' active' : '');
         });
     }
 
     function resetUI() {
-        document.getElementById('speedValue').textContent = '--';
+        ['speedValue','downloadSpeed','uploadSpeed','latency'].forEach(id => {
+            document.getElementById(id).textContent = '--';
+        });
         document.getElementById('speedUnit').textContent = 'Mbps';
         document.getElementById('speedLabel').textContent = 'Ready';
         document.getElementById('speedDetails').style.display = 'none';
         document.getElementById('phaseIndicator').style.display = 'none';
         document.getElementById('speedStatus').className = 'speed-status';
-        document.getElementById('downloadSpeed').textContent = '--';
-        document.getElementById('uploadSpeed').textContent = '--';
-        document.getElementById('latency').textContent = '--';
         setGauge(0);
     }
 
@@ -1536,50 +1515,14 @@
         el.className = 'speed-status ' + type;
     }
 
-    // Try to get nearest M-Lab server; fall back to static list if blocked
-    async function locateServer() {
-        // Try multiple CORS-friendly locate endpoints
-        const endpoints = [
-            'https://locate.measurementlab.net/v2/nearest/ndt/ndt7',
-            'https://locate.measurementlab.net/v2/nearest/ndt/ndt7?country=US',
-        ];
-
-        for (const url of endpoints) {
-            try {
-                const res = await fetch(url, { mode: 'cors', cache: 'no-cache' });
-                if (!res.ok) continue;
-                const data = await res.json();
-                const r = data.results && data.results[0];
-                if (!r) continue;
-                const dl = r.URLs['wss://ndt/v7/download'];
-                const ul = r.URLs['wss://ndt/v7/upload'];
-                if (dl && ul) return { download: dl, upload: ul };
-            } catch (e) {
-                // CORS blocked or network error — try next
-            }
-        }
-
-        // Fallback: probe fallback servers via WebSocket to find one that responds
-        console.log('[SpeedTest] Locate API unavailable, probing fallback servers…');
-        for (const host of FALLBACK_SERVERS) {
-            const urls = buildNDT7URLs(host);
-            const alive = await probeServer(urls.download);
-            if (alive) return urls;
-        }
-
-        throw new Error('Could not reach any M-Lab test server. Please check your internet connection.');
-    }
-
-    // Quick WebSocket probe — resolves true if server accepts connection
-    function probeServer(wsURL) {
-        return new Promise((resolve) => {
-            const timeout = setTimeout(() => { resolve(false); }, 4000);
-            try {
-                const ws = new WebSocket(wsURL, 'net.measurementlab.ndt.v7');
-                ws.binaryType = 'arraybuffer';
-                ws.onopen = () => { clearTimeout(timeout); ws.close(); resolve(true); };
-                ws.onerror = () => { clearTimeout(timeout); resolve(false); };
-            } catch(e) { clearTimeout(timeout); resolve(false); }
+    function loadNDT7Library() {
+        return new Promise((resolve, reject) => {
+            if (window.ndt7) return resolve(window.ndt7);
+            const s = document.createElement('script');
+            s.src = 'https://cdn.jsdelivr.net/npm/@m-lab/ndt7@1.0.1/ndt7.js';
+            s.onload = () => { if (window.ndt7) resolve(window.ndt7); else reject(new Error('ndt7 library loaded but not found on window.')); };
+            s.onerror = () => reject(new Error('Could not load the NDT7 speed test library. Check your internet connection.'));
+            document.head.appendChild(s);
         });
     }
 
@@ -1594,58 +1537,84 @@
         document.getElementById('phaseIndicator').style.display = 'flex';
 
         try {
-            // ── Step 1: Locate server ──
             setPhase('locate');
-            setStatus('Finding nearest test server…', 'testing');
-            document.getElementById('speedLabel').textContent = 'Locating…';
+            setStatus('Loading speed test engine…', 'testing');
+            document.getElementById('speedLabel').textContent = 'Loading…';
 
-            const { download: downloadURL, upload: uploadURL } = await locateServer();
+            const ndt7 = await loadNDT7Library();
 
-            // ── Step 2: Latency ──
-            setPhase('latency');
-            setStatus('Measuring latency…', 'testing');
-            document.getElementById('speedLabel').textContent = 'Pinging…';
+            setStatus('Finding nearest server…', 'testing');
 
-            const latencyMs = await measureLatency(downloadURL);
-            document.getElementById('latency').textContent = latencyMs + ' ms';
+            let downloadSamples = [], uploadSamples = [];
+            let downloadResult = 0, uploadResult = 0;
+            let minRTT = Infinity;
 
-            // ── Step 3: Download ──
-            setPhase('download');
-            setStatus('Testing download speed… (10 sec)', 'testing');
-            document.getElementById('speedLabel').textContent = 'Downloading…';
+            await ndt7.test(
+                { metadata: { client_name: 'SpheraComm-SpeedTest', client_version: '1.0.0' } },
+                {
+                    downloadStart: () => {
+                        setPhase('download');
+                        setStatus('Testing download speed… (10 sec)', 'testing');
+                        document.getElementById('speedLabel').textContent = 'Downloading…';
+                        setGauge(0);
+                    },
+                    downloadMeasurement: (data) => {
+                        if (data.Source === 'client' && data.Data && data.Data.MeanClientMbps) {
+                            downloadSamples.push(data.Data.MeanClientMbps);
+                            const display = smoothedValue(downloadSamples);
+                            document.getElementById('speedValue').textContent = display.toFixed(1);
+                            setGauge(display);
+                        }
+                        if (data.Source === 'server' && data.Data && data.Data.TCPInfo && data.Data.TCPInfo.RTT) {
+                            minRTT = Math.min(minRTT, data.Data.TCPInfo.RTT);
+                        }
+                    },
+                    downloadComplete: (data) => {
+                        downloadResult = (data && data.LastClientMeasurement && data.LastClientMeasurement.MeanClientMbps)
+                            ? data.LastClientMeasurement.MeanClientMbps
+                            : (downloadSamples.length ? percentile90(downloadSamples) : 0);
+                        document.getElementById('downloadSpeed').textContent = downloadResult.toFixed(1) + ' Mbps';
+                        document.getElementById('speedValue').textContent = downloadResult.toFixed(1);
+                        setGauge(downloadResult);
+                        if (minRTT !== Infinity) {
+                            document.getElementById('latency').textContent = Math.round(minRTT / 1000) + ' ms';
+                        }
+                    },
+                    uploadStart: () => {
+                        setPhase('upload');
+                        setStatus('Testing upload speed… (10 sec)', 'testing');
+                        document.getElementById('speedLabel').textContent = 'Uploading…';
+                        setGauge(0);
+                        document.getElementById('speedValue').textContent = '0';
+                    },
+                    uploadMeasurement: (data) => {
+                        if (data.Source === 'client' && data.Data && data.Data.MeanClientMbps) {
+                            uploadSamples.push(data.Data.MeanClientMbps);
+                            const display = smoothedValue(uploadSamples);
+                            document.getElementById('speedValue').textContent = display.toFixed(1);
+                            setGauge(display);
+                        }
+                    },
+                    uploadComplete: (data) => {
+                        uploadResult = (data && data.LastClientMeasurement && data.LastClientMeasurement.MeanClientMbps)
+                            ? data.LastClientMeasurement.MeanClientMbps
+                            : (uploadSamples.length ? percentile90(uploadSamples) : 0);
+                        document.getElementById('uploadSpeed').textContent = uploadResult.toFixed(1) + ' Mbps';
+                    },
+                    error: (err) => { throw new Error(String(err)); },
+                }
+            );
 
-            const downloadMbps = await runNDT7Download(downloadURL, (mbps) => {
-                document.getElementById('speedValue').textContent = mbps.toFixed(1);
-                setGauge(mbps);
-            });
-
-            document.getElementById('downloadSpeed').textContent = downloadMbps.toFixed(1) + ' Mbps';
-
-            // ── Step 4: Upload ──
-            setPhase('upload');
-            setStatus('Testing upload speed… (10 sec)', 'testing');
-            document.getElementById('speedLabel').textContent = 'Uploading…';
-            setGauge(0);
-            document.getElementById('speedValue').textContent = '0';
-
-            const uploadMbps = await runNDT7Upload(uploadURL, (mbps) => {
-                document.getElementById('speedValue').textContent = mbps.toFixed(1);
-                setGauge(mbps);
-            });
-
-            document.getElementById('uploadSpeed').textContent = uploadMbps.toFixed(1) + ' Mbps';
-
-            // ── Done ──
-            document.getElementById('speedValue').textContent = downloadMbps.toFixed(1);
+            document.getElementById('speedValue').textContent = downloadResult.toFixed(1);
             document.getElementById('speedUnit').textContent = 'Mbps';
             document.getElementById('speedLabel').textContent = 'Download Speed';
-            setGauge(downloadMbps);
+            setGauge(downloadResult);
             document.getElementById('speedDetails').style.display = 'grid';
             setStatus('✓ Speed test complete!', 'complete');
             PHASES.forEach(p => { document.getElementById('dot-' + p).className = 'phase-dot done'; });
 
         } catch (err) {
-            setStatus('⚠ ' + err.message, 'error');
+            setStatus('⚠ ' + (err.message || 'Test failed — please try again.'), 'error');
             document.getElementById('speedValue').textContent = '!';
             document.getElementById('speedLabel').textContent = 'Failed';
             console.error('[SpeedTest]', err);
@@ -1656,144 +1625,9 @@
         btn.textContent = 'Test Again';
     }
 
-    function measureLatency(wsURL) {
-        return new Promise((resolve) => {
-            const samples = [];
-            let attempts = 0;
-            const total = 5;
-
-            function ping() {
-                const start = performance.now();
-                try {
-                    const ws = new WebSocket(wsURL, 'net.measurementlab.ndt.v7');
-                    ws.binaryType = 'arraybuffer';
-                    ws.onopen = () => { samples.push(Math.round(performance.now() - start)); ws.close(); };
-                    ws.onerror = () => { ws.close(); };
-                    ws.onclose = () => {
-                        attempts++;
-                        if (attempts < total) setTimeout(ping, 100);
-                        else {
-                            const sorted = [...samples].sort((a,b) => a-b);
-                            resolve(sorted[Math.floor(sorted.length / 2)] || 25);
-                        }
-                    };
-                } catch(e) {
-                    attempts++;
-                    if (attempts < total) setTimeout(ping, 100);
-                    else resolve(samples.length ? samples[0] : 25);
-                }
-            }
-            ping();
-        });
-    }
-
-    function runNDT7Download(wsURL, onProgress) {
-        return new Promise((resolve, reject) => {
-            let ws;
-            try { ws = new WebSocket(wsURL, 'net.measurementlab.ndt.v7'); }
-            catch(e) { return reject(new Error('Cannot open download WebSocket: ' + e.message)); }
-
-            ws.binaryType = 'arraybuffer';
-
-            let totalBytes = 0, lastBytes = 0, startTime = null;
-            let intervalId = null, samples = [];
-            const DURATION = 10000;
-
-            ws.onopen = () => {
-                startTime = performance.now();
-                intervalId = setInterval(() => {
-                    const elapsed = performance.now() - startTime;
-                    if (elapsed < 500) return;
-                    const delta = totalBytes - lastBytes;
-                    lastBytes = totalBytes;
-                    const mbps = (delta * 8) / (1e6 * 0.25);
-                    if (mbps > 0) {
-                        samples.push(mbps);
-                        onProgress(smoothedMedian(samples));
-                    }
-                }, 250);
-            };
-
-            ws.onmessage = (evt) => {
-                if (evt.data instanceof ArrayBuffer) totalBytes += evt.data.byteLength;
-                // Server JSON stats also arrive — we can use BytesReceived from TCPInfo for higher accuracy
-                else {
-                    try {
-                        const msg = JSON.parse(evt.data);
-                        if (msg.TCPInfo && msg.TCPInfo.BytesReceived) {
-                            totalBytes = msg.TCPInfo.BytesReceived;
-                        }
-                    } catch(e) {}
-                }
-            };
-
-            ws.onerror = () => { clearInterval(intervalId); reject(new Error('Download WebSocket error.')); };
-
-            ws.onclose = () => {
-                clearInterval(intervalId);
-                if (!samples.length) return reject(new Error('No download data received.'));
-                resolve(percentile90(samples));
-            };
-
-            setTimeout(() => { try { if (ws.readyState === WebSocket.OPEN) ws.close(); } catch(e){} }, DURATION);
-        });
-    }
-
-    function runNDT7Upload(wsURL, onProgress) {
-        return new Promise((resolve, reject) => {
-            let ws;
-            try { ws = new WebSocket(wsURL, 'net.measurementlab.ndt.v7'); }
-            catch(e) { return reject(new Error('Cannot open upload WebSocket: ' + e.message)); }
-
-            ws.binaryType = 'arraybuffer';
-
-            const CHUNK = new ArrayBuffer(1 << 15); // 32KB chunks
-            let totalSent = 0, lastSent = 0, startTime = null;
-            let intervalId = null, samples = [], running = false;
-            const DURATION = 10000;
-
-            function sendLoop() {
-                if (!running || ws.readyState !== WebSocket.OPEN) return;
-                while (ws.bufferedAmount < CHUNK.byteLength * 32) {
-                    ws.send(CHUNK);
-                    totalSent += CHUNK.byteLength;
-                }
-                setTimeout(sendLoop, 1);
-            }
-
-            ws.onopen = () => {
-                running = true;
-                startTime = performance.now();
-                sendLoop();
-                intervalId = setInterval(() => {
-                    if (performance.now() - startTime < 500) return;
-                    const delta = totalSent - lastSent;
-                    lastSent = totalSent;
-                    const mbps = (delta * 8) / (1e6 * 0.25);
-                    if (mbps > 0) {
-                        samples.push(mbps);
-                        onProgress(smoothedMedian(samples));
-                    }
-                }, 250);
-            };
-
-            ws.onmessage = () => {};
-            ws.onerror = () => { running = false; clearInterval(intervalId); reject(new Error('Upload WebSocket error.')); };
-            ws.onclose = () => {
-                running = false;
-                clearInterval(intervalId);
-                if (!samples.length) return reject(new Error('No upload data sent.'));
-                resolve(percentile90(samples));
-            };
-
-            setTimeout(() => { running = false; try { if (ws.readyState === WebSocket.OPEN) ws.close(); } catch(e){} }, DURATION);
-        });
-    }
-
-    function smoothedMedian(arr) {
-        const recent = arr.slice(-12);
-        const sorted = [...recent].sort((a,b) => a-b);
-        return sorted[Math.floor(sorted.length / 2)];
+    function smoothedValue(samples) {
+        const recent = [...samples.slice(-8)].sort((a,b) => a-b);
+        return recent[Math.floor(recent.length / 2)] || 0;
     }
 
     function percentile90(arr) {
