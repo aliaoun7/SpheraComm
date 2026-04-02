@@ -426,6 +426,289 @@
             pointer-events: none;
         }
 
+        /* ===== CONSUMER STORIES ===== */
+        .consumer-stories-wrapper {
+            max-width: 1400px;
+            margin: 3rem auto 0;
+            padding: 0;
+        }
+
+        .stories-intro {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .stories-intro h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            color: var(--light);
+            margin-bottom: 0.5rem;
+        }
+
+        .stories-intro p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .stories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .story-card {
+            background: var(--surface-strong);
+            border: 1px solid var(--border-soft);
+            border-radius: 20px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.3s ease;
+        }
+
+        .story-card:hover { transform: translateY(-4px); }
+
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .avatar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .avatar {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .avatar.a { background: #dbeafe; color: #1d4ed8; }
+        .avatar.b { background: #d1fae5; color: #065f46; }
+        .avatar.c { background: #ede9fe; color: #5b21b6; }
+        .avatar.d { background: #fef3c7; color: #92400e; }
+
+        .avatar-info .name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--light);
+        }
+
+        .avatar-info .location {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .service-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 50px;
+            margin-bottom: 1rem;
+        }
+
+        .service-tag.home { background: #dbeafe; color: #1e40af; border: 1px solid rgba(59,130,246,0.2); }
+        .service-tag.biz { background: #d1fae5; color: #065f46; border: 1px solid rgba(16,185,129,0.2); }
+
+        .compare-box {
+            display: flex;
+            border: 1px solid var(--border-soft);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .compare-col {
+            flex: 1;
+            padding: 0.75rem;
+        }
+
+        .compare-col.before-col {
+            background: rgba(241,245,249,0.9);
+            border-right: 1px solid var(--border-soft);
+        }
+
+        .compare-col.after-col {
+            background: rgba(236,253,245,0.9);
+        }
+
+        .compare-col-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--gray);
+            margin-bottom: 4px;
+        }
+
+        .compare-col-val {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--light);
+            margin-bottom: 2px;
+        }
+
+        .after-col .compare-col-val { color: #065f46; }
+
+        .compare-col-sub {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        .after-col .compare-col-sub { color: #047857; }
+
+        .savings-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(236,253,245,0.9);
+            border: 1px solid rgba(16,185,129,0.25);
+            border-radius: 10px;
+            padding: 0.6rem 0.875rem;
+            margin-bottom: 0.875rem;
+        }
+
+        .savings-pill-icon {
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            background: var(--success);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            flex-shrink: 0;
+            font-weight: 700;
+        }
+
+        .savings-pill-text {
+            font-size: 0.82rem;
+            color: #065f46;
+            line-height: 1.4;
+        }
+
+        .savings-pill-text strong { font-weight: 600; }
+
+        .story-quote {
+            font-size: 0.82rem;
+            color: var(--gray);
+            font-style: italic;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border-soft);
+            line-height: 1.55;
+        }
+
+        .stories-bar-chart {
+            background: var(--surface);
+            border: 1px solid var(--border-soft);
+            border-radius: 20px;
+            padding: 1.75rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .bar-chart-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--light);
+            margin-bottom: 0.25rem;
+        }
+
+        .bar-chart-sub {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .bar-group { margin-bottom: 1.1rem; }
+
+        .bar-group-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--light);
+            margin-bottom: 5px;
+        }
+
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .bar-row-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            width: 36px;
+            flex-shrink: 0;
+            text-align: right;
+        }
+
+        .bar-track {
+            flex: 1;
+            background: rgba(241,245,249,0.8);
+            border-radius: 6px;
+            height: 26px;
+            overflow: hidden;
+            border: 1px solid var(--border-soft);
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            transition: width 1s ease;
+        }
+
+        .bar-fill.bar-before { background: #cbd5e1; }
+        .bar-fill.bar-after { background: linear-gradient(90deg, #10b981, #34d399); }
+
+        .bar-fill-val {
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .bar-fill.bar-before .bar-fill-val { color: #475569; }
+        .bar-fill.bar-after .bar-fill-val { color: white; }
+
+        .bar-legend {
+            display: flex;
+            gap: 1.25rem;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .bar-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bar-legend-swatch {
+            width: 12px; height: 12px;
+            border-radius: 3px;
+        }
+
+        /* ===== ABOUT ===== */
         .about-section {
             background: linear-gradient(180deg, transparent, rgba(59, 130, 246, 0.05), transparent);
             padding: 5rem 5%;
@@ -447,34 +730,7 @@
             margin-bottom: 2.5rem;
         }
 
-        .carrier-logos {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 3rem;
-            flex-wrap: wrap;
-            margin-top: 2rem;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.76);
-            border-radius: 20px;
-            border: 1px solid var(--border-soft);
-        }
-
-        .carrier-item { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
-
-        .carrier-icon {
-            width: 60px; height: 60px;
-            background: linear-gradient(135deg, rgba(191, 219, 254, 0.7), rgba(224, 242, 254, 0.8));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            border: 1px solid rgba(56, 189, 248, 0.18);
-        }
-
-        .carrier-name { font-size: 0.85rem; color: var(--gray); font-weight: 500; }
-        /* ===== FAQ SECTION ===== */
+        /* ===== FAQ ===== */
         .faq-section {
             background: linear-gradient(180deg, rgba(0, 102, 255, 0.05), transparent);
             padding: 5rem 5%;
@@ -601,9 +857,7 @@
             line-height: 1.6;
         }
 
-        .faq-panel {
-            padding: 1rem;
-        }
+        .faq-panel { padding: 1rem; }
 
         .faq-item {
             border-radius: 22px;
@@ -618,7 +872,7 @@
 
         .faq-item.active {
             border-color: rgba(0, 212, 255, 0.34);
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.96);
             transform: translateY(-2px);
         }
 
@@ -628,7 +882,7 @@
             border: none;
             padding: 1.35rem 1.4rem;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
             gap: 1rem;
             color: var(--light);
@@ -641,11 +895,11 @@
 
         .faq-question span:first-child {
             line-height: 1.5;
+            padding-right: 0.5rem;
         }
 
         .faq-icon {
-            width: 36px;
-            height: 36px;
+            width: 36px; height: 36px;
             flex-shrink: 0;
             border-radius: 50%;
             border: 1px solid rgba(255, 255, 255, 0.12);
@@ -681,7 +935,7 @@
             max-width: 90%;
         }
 
-        /* ===== REST OF SITE ===== */
+        /* ===== RESULTS / TRANSFORMATION ===== */
         .transformation-section {
             background: linear-gradient(180deg, transparent, rgba(59, 130, 246, 0.05), transparent);
             padding: 5rem 5%;
@@ -704,6 +958,7 @@
             position: relative;
             overflow: hidden;
             transition: transform 0.3s ease;
+            box-shadow: var(--shadow-soft);
         }
 
         .comparison-card:hover { transform: translateY(-5px); }
@@ -773,6 +1028,47 @@
             background-clip: text;
         }
 
+        /* ===== DISCLAIMER ===== */
+        .results-disclaimer {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: rgba(255, 251, 235, 0.9);
+            border: 1px solid rgba(217, 119, 6, 0.25);
+            border-left: 3px solid #d97706;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .disclaimer-icon {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: #fef3c7;
+            border: 1px solid rgba(217,119,6,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 11px;
+            font-weight: 700;
+            color: #92400e;
+            margin-top: 1px;
+        }
+
+        .disclaimer-text {
+            font-size: 0.875rem;
+            color: #78350f;
+            line-height: 1.6;
+        }
+
+        .disclaimer-text strong {
+            font-weight: 600;
+            color: #92400e;
+        }
+
+        /* ===== STATS ===== */
         .stats-section {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -789,6 +1085,7 @@
             border: 1px solid var(--border-soft);
             border-radius: 20px;
             transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
         }
 
         .stat-card:hover {
@@ -808,6 +1105,7 @@
 
         .stat-label { color: var(--gray); font-size: 0.95rem; }
 
+        /* ===== CONTACT ===== */
         .contact-section {
             background: linear-gradient(180deg, transparent, rgba(59, 130, 246, 0.05), transparent);
             padding: 5rem 5%;
@@ -822,6 +1120,7 @@
             padding: 2.5rem;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow-soft);
         }
 
         .contact-container::before {
@@ -949,6 +1248,7 @@
 
         .email-display a:hover { text-decoration: underline; }
 
+        /* ===== CTA ===== */
         .cta-section {
             text-align: center;
             padding: 5rem 5%;
@@ -981,6 +1281,7 @@
             margin: 0 auto 1.75rem;
         }
 
+        /* ===== FOOTER ===== */
         footer {
             background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
             border-top: 1px solid var(--border-soft);
@@ -1040,6 +1341,7 @@
             font-size: 0.875rem;
         }
 
+        /* ===== DECORATIVE ===== */
         .speed-lines {
             position: absolute;
             width: 100%; height: 100%;
@@ -1071,61 +1373,7 @@
             transform: translateY(0);
         }
 
-        .hero-text h1,
-        .section-header h2,
-        .logo-text,
-        .savings-amount {
-            text-shadow: none;
-        }
-
-        .faq-section, .about-section, .contact-section, .transformation-section, .cta-section {
-            overflow: visible;
-        }
-
-        .faq-shell,
-        .comparison-card,
-        .stat-card,
-        .contact-container,
-        .faq-intro,
-        .faq-panel,
-        .carrier-logos,
-        .email-display {
-            box-shadow: var(--shadow-soft);
-        }
-
-        .faq-item.active {
-            background: rgba(255,255,255,0.96);
-        }
-
-        .faq-question {
-            align-items: flex-start;
-        }
-
-        .faq-question span:first-child {
-            padding-right: 0.5rem;
-        }
-
-        .faq-answer-inner {
-            padding-bottom: 1.35rem;
-        }
-
-        .hero-image,
-        .split-visual img {
-            background: linear-gradient(135deg, rgba(219,234,254,0.9), rgba(240,249,255,0.9));
-        }
-
-        @media (max-width: 768px) {
-            body { overflow-x: hidden; }
-            .hero { padding-top: 6.5rem; }
-            .hero-buttons { flex-direction: column; }
-            .btn-secondary, .cta-button { text-align: center; }
-            .faq-shell, .faq-panel, .faq-intro { overflow: visible; }
-            .faq-panel { border-radius: 22px; }
-            .faq-item { overflow: visible; }
-            .faq-answer { overflow: hidden; }
-            .faq-question span:first-child { line-height: 1.45; }
-        }
-
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
             .hero-content { grid-template-columns: 1fr; text-align: center; }
             .hero-text h1 { font-size: 3rem; }
@@ -1137,13 +1385,18 @@
             .form-row { grid-template-columns: 1fr; }
             .faq-shell { grid-template-columns: 1fr; }
             .faq-mini-stats { grid-template-columns: 1fr; }
+            .stories-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 768px) {
+            body { overflow-x: hidden; }
             .nav-links { display: none; }
             .logo { padding: 0.4rem 0.8rem; font-size: 1.3rem; }
             .logo-img-container { width: 35px; height: 35px; }
+            .hero { padding-top: 6.5rem; }
             .hero-text h1 { font-size: 2.5rem; }
+            .hero-buttons { flex-direction: column; }
+            .btn-secondary, .cta-button { text-align: center; }
             .stats-section { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
             .stat-number { font-size: 2rem; }
             .footer-content { grid-template-columns: 1fr; gap: 2rem; }
@@ -1153,12 +1406,16 @@
             .faq-question { padding: 1.1rem; font-size: 0.95rem; }
             .faq-answer-inner { padding: 0 1.1rem 1.1rem; }
             .faq-answer p { max-width: 100%; }
+            .faq-shell, .faq-panel, .faq-intro { overflow: visible; }
+            .faq-panel { border-radius: 22px; }
+            .faq-item { overflow: visible; }
+            .faq-answer { overflow: hidden; }
+            .stories-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- SVG gradient for gauge -->
     <svg width="0" height="0" style="position:absolute;">
         <defs>
             <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -1171,6 +1428,7 @@
     <div class="bg-animation"></div>
     <div class="particles" id="particles"></div>
 
+    <!-- NAV -->
     <nav id="navbar">
         <div class="nav-container">
             <a href="#" class="logo">
@@ -1227,43 +1485,232 @@
     </section>
 
     <!-- CONSUMER -->
-    <section id="consumer" class="split-section fade-in">
-        <div class="split-content">
-            <span class="badge">For Your Home</span>
-            <h3>Internet That Actually Works</h3>
-            <p>Tired of buffering, outages, and paying too much for too little? We audit your current setup and match you with premium carriers offering faster speeds at better prices—guaranteed.</p>
-            <ul class="feature-list">
-                <li>Free comprehensive speed audit</li>
-                                <li>Access to exclusive carrier deals</li>
-                <li>White-glove installation support</li>
-                <li>24/7 priority customer service</li>
-            </ul>
-            <a href="#contact" class="cta-button">Get Your Free Audit</a>
+    <section id="consumer" style="padding: 5rem 5%;">
+        <div class="split-section fade-in" style="margin-bottom: 3rem;">
+            <div class="split-content">
+                <span class="badge">For Your Home</span>
+                <h3>Internet That Actually Works</h3>
+                <p>Tired of buffering, outages, and paying too much for too little? We audit your current setup and match you with premium carriers offering faster speeds at better prices—guaranteed.</p>
+                <ul class="feature-list">
+                    <li>Free comprehensive speed audit</li>
+                    <li>Access to exclusive carrier deals</li>
+                    <li>White-glove installation support</li>
+                    <li>24/7 priority customer service</li>
+                </ul>
+                <a href="#contact" class="cta-button">Get Your Free Audit</a>
+            </div>
+            <div class="split-visual">
+                <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?w=800&q=80" alt="Happy Family Using Internet">
+                <div class="visual-overlay"></div>
+            </div>
         </div>
-        <div class="split-visual">
-            <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?w=800&q=80" alt="Happy Family Using Internet">
-            <div class="visual-overlay"></div>
+
+        <!-- CUSTOMER SAVINGS STORIES -->
+        <div class="consumer-stories-wrapper fade-in">
+            <div class="stories-intro">
+                <h4>Real customers. Real savings.</h4>
+                <p>See what SpheraComm clients were paying before — and what they pay now.</p>
+            </div>
+
+            <div class="stories-grid">
+                <!-- Mary J. -->
+                <div class="story-card">
+                    <div class="avatar-row">
+                        <div class="avatar a">MJ</div>
+                        <div class="avatar-info">
+                            <div class="name">Mary J.</div>
+                            <div class="location">Detroit, MI &middot; Family of 4</div>
+                        </div>
+                    </div>
+                    <span class="service-tag home">Home internet + phone</span>
+                    <div class="compare-box">
+                        <div class="compare-col before-col">
+                            <div class="compare-col-label">Before</div>
+                            <div class="compare-col-val">$412/mo</div>
+                            <div class="compare-col-sub">75 Mbps &middot; shared cable</div>
+                        </div>
+                        <div class="compare-col after-col">
+                            <div class="compare-col-label">After</div>
+                            <div class="compare-col-val">$274/mo</div>
+                            <div class="compare-col-sub">1 Gbps &middot; fiber</div>
+                        </div>
+                    </div>
+                    <div class="savings-pill">
+                        <div class="savings-pill-icon">↓</div>
+                        <div class="savings-pill-text"><strong>Saving $138/mo &middot; $1,656/yr</strong><br>Faster speeds, no more buffering</div>
+                    </div>
+                    <p class="story-quote">"We couldn't believe we were paying so much for a service this slow. SpheraComm switched us in two weeks."</p>
+                </div>
+
+                <!-- Tom R. -->
+                <div class="story-card">
+                    <div class="avatar-row">
+                        <div class="avatar b">TR</div>
+                        <div class="avatar-info">
+                            <div class="name">Tom R.</div>
+                            <div class="location">Ann Arbor, MI &middot; Small business</div>
+                        </div>
+                    </div>
+                    <span class="service-tag biz">Business internet + VoIP</span>
+                    <div class="compare-box">
+                        <div class="compare-col before-col">
+                            <div class="compare-col-label">Before</div>
+                            <div class="compare-col-val">$620/mo</div>
+                            <div class="compare-col-sub">200 Mbps &middot; shared cable</div>
+                        </div>
+                        <div class="compare-col after-col">
+                            <div class="compare-col-label">After</div>
+                            <div class="compare-col-val">$390/mo</div>
+                            <div class="compare-col-sub">1 Gbps symmetric &middot; fiber</div>
+                        </div>
+                    </div>
+                    <div class="savings-pill">
+                        <div class="savings-pill-icon">↓</div>
+                        <div class="savings-pill-text"><strong>Saving $230/mo &middot; $2,760/yr</strong><br>Symmetric speeds + VoIP upgrade</div>
+                    </div>
+                    <p class="story-quote">"Video calls used to drop constantly. Now the whole office is on fiber and we haven't had a single outage."</p>
+                </div>
+
+                <!-- Sarah K. -->
+                <div class="story-card">
+                    <div class="avatar-row">
+                        <div class="avatar c">SK</div>
+                        <div class="avatar-info">
+                            <div class="name">Sarah K.</div>
+                            <div class="location">Farmington Hills, MI &middot; WFH</div>
+                        </div>
+                    </div>
+                    <span class="service-tag home">Home internet + streaming</span>
+                    <div class="compare-box">
+                        <div class="compare-col before-col">
+                            <div class="compare-col-label">Before</div>
+                            <div class="compare-col-val">$189/mo</div>
+                            <div class="compare-col-sub">100 Mbps &middot; cable DSL</div>
+                        </div>
+                        <div class="compare-col after-col">
+                            <div class="compare-col-label">After</div>
+                            <div class="compare-col-val">$129/mo</div>
+                            <div class="compare-col-sub">500 Mbps &middot; fiber</div>
+                        </div>
+                    </div>
+                    <div class="savings-pill">
+                        <div class="savings-pill-icon">↓</div>
+                        <div class="savings-pill-text"><strong>Saving $60/mo &middot; $720/yr</strong><br>5× faster speeds, lower bill</div>
+                    </div>
+                    <p class="story-quote">"I work from home full-time. Reliable upload speed changed everything for me."</p>
+                </div>
+
+                <!-- Dave M. -->
+                <div class="story-card">
+                    <div class="avatar-row">
+                        <div class="avatar d">DM</div>
+                        <div class="avatar-info">
+                            <div class="name">Dave M.</div>
+                            <div class="location">Novi, MI &middot; Retail store owner</div>
+                        </div>
+                    </div>
+                    <span class="service-tag biz">Business internet + POS</span>
+                    <div class="compare-box">
+                        <div class="compare-col before-col">
+                            <div class="compare-col-label">Before</div>
+                            <div class="compare-col-val">$340/mo</div>
+                            <div class="compare-col-sub">150 Mbps &middot; shared</div>
+                        </div>
+                        <div class="compare-col after-col">
+                            <div class="compare-col-label">After</div>
+                            <div class="compare-col-val">$215/mo</div>
+                            <div class="compare-col-sub">1 Gbps &middot; shared fiber</div>
+                        </div>
+                    </div>
+                    <div class="savings-pill">
+                        <div class="savings-pill-icon">↓</div>
+                        <div class="savings-pill-text"><strong>Saving $125/mo &middot; $1,500/yr</strong><br>POS never drops, cameras stream clean</div>
+                    </div>
+                    <p class="story-quote">"My POS system used to freeze during peak hours. That problem is completely gone now."</p>
+                </div>
+            </div>
+
+            <!-- Bar chart comparison -->
+            <div class="stories-bar-chart">
+                <div class="bar-chart-title">Monthly bill comparison — before vs. after SpheraComm</div>
+                <div class="bar-chart-sub">Shared fiber pricing shown. Individual results may vary based on location and service tier.</div>
+
+                <div class="bar-group">
+                    <div class="bar-group-name">Mary J. — Home internet + phone</div>
+                    <div class="bar-row">
+                        <span class="bar-row-label">Before</span>
+                        <div class="bar-track"><div class="bar-fill bar-before" style="width:82%"><span class="bar-fill-val">$412</span></div></div>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-row-label">After</span>
+                        <div class="bar-track"><div class="bar-fill bar-after" style="width:55%"><span class="bar-fill-val">$274</span></div></div>
+                    </div>
+                </div>
+
+                <div class="bar-group">
+                    <div class="bar-group-name">Tom R. — Business internet + VoIP</div>
+                    <div class="bar-row">
+                        <span class="bar-row-label">Before</span>
+                        <div class="bar-track"><div class="bar-fill bar-before" style="width:100%"><span class="bar-fill-val">$620</span></div></div>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-row-label">After</span>
+                        <div class="bar-track"><div class="bar-fill bar-after" style="width:63%"><span class="bar-fill-val">$390</span></div></div>
+                    </div>
+                </div>
+
+                <div class="bar-group">
+                    <div class="bar-group-name">Sarah K. — Home internet + streaming</div>
+                    <div class="bar-row">
+                        <span class="bar-row-label">Before</span>
+                        <div class="bar-track"><div class="bar-fill bar-before" style="width:38%"><span class="bar-fill-val">$189</span></div></div>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-row-label">After</span>
+                        <div class="bar-track"><div class="bar-fill bar-after" style="width:26%"><span class="bar-fill-val">$129</span></div></div>
+                    </div>
+                </div>
+
+                <div class="bar-group">
+                    <div class="bar-group-name">Dave M. — Business internet + POS</div>
+                    <div class="bar-row">
+                        <span class="bar-row-label">Before</span>
+                        <div class="bar-track"><div class="bar-fill bar-before" style="width:68%"><span class="bar-fill-val">$340</span></div></div>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-row-label">After</span>
+                        <div class="bar-track"><div class="bar-fill bar-after" style="width:43%"><span class="bar-fill-val">$215</span></div></div>
+                    </div>
+                </div>
+
+                <div class="bar-legend">
+                    <div class="bar-legend-item"><div class="bar-legend-swatch" style="background:#cbd5e1;"></div> Before SpheraComm</div>
+                    <div class="bar-legend-item"><div class="bar-legend-swatch" style="background:#10b981;"></div> After SpheraComm</div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- BUSINESS -->
-    <section id="business" class="split-section reverse fade-in">
-        <div class="split-content">
-            <span class="badge">For Your Business</span>
-            <h3>Enterprise-Grade Connectivity</h3>
-            <p>Stop letting slow internet kill your productivity. Our business solutions deliver dedicated fiber, symmetrical speeds, and 99.99% uptime SLAs that keep your operations running at peak efficiency.</p>
-            <ul class="feature-list">
-                <li>Dedicated & shared fiber options</li>
-                <li>Symmetrical upload/download speeds</li>
-                <li>Scalable bandwidth as you grow</li>
-                <li>Managed network services</li>
-                <li>Dedicated business support team</li>
-            </ul>
-            <a href="#contact" class="cta-button">Talk to Solutions Expert</a>
-        </div>
-        <div class="split-visual">
-            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80" alt="Business Team Technology">
-            <div class="visual-overlay"></div>
+    <section id="business" style="padding: 5rem 5%;">
+        <div class="split-section reverse fade-in">
+            <div class="split-content">
+                <span class="badge">For Your Business</span>
+                <h3>Enterprise-Grade Connectivity</h3>
+                <p>Stop letting slow internet kill your productivity. Our business solutions deliver dedicated fiber, symmetrical speeds, and 99.99% uptime SLAs that keep your operations running at peak efficiency.</p>
+                <ul class="feature-list">
+                    <li>Dedicated &amp; shared fiber options</li>
+                    <li>Symmetrical upload/download speeds</li>
+                    <li>Scalable bandwidth as you grow</li>
+                    <li>Managed network services</li>
+                    <li>Dedicated business support team</li>
+                </ul>
+                <a href="#contact" class="cta-button">Talk to Solutions Expert</a>
+            </div>
+            <div class="split-visual">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80" alt="Business Team Technology">
+                <div class="visual-overlay"></div>
+            </div>
         </div>
     </section>
 
@@ -1308,11 +1755,10 @@
                     </button>
                     <div class="faq-answer">
                         <div class="faq-answer-inner">
-                            <p>That depends on how your location uses bandwidth, how many devices are competing at once, how often you rely on cloud systems, voice traffic, large uploads, remote work, and what downtime costs you. In many cases, the issue is not that a client needs “more internet.” It is that they are on the wrong service type, wrong speed tier, or wrong network design. A real audit separates marketing claims from actual performance requirements.</p>
+                            <p>That depends on how your location uses bandwidth, how many devices are competing at once, how often you rely on cloud systems, voice traffic, large uploads, remote work, and what downtime costs you. In many cases, the issue is not that a client needs "more internet." It is that they are on the wrong service type, wrong speed tier, or wrong network design. A real audit separates marketing claims from actual performance requirements.</p>
                         </div>
                     </div>
                 </div>
-
                 <div class="faq-item">
                     <button class="faq-question" type="button">
                         <span>What is the difference between shared fiber and dedicated fiber for a business?</span>
@@ -1324,7 +1770,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="faq-item">
                     <button class="faq-question" type="button">
                         <span>Why does my speed test look fine, but video calls, uploads, and cloud apps still feel slow?</span>
@@ -1336,7 +1781,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="faq-item">
                     <button class="faq-question" type="button">
                         <span>Can switching providers actually lower my bill without sacrificing performance?</span>
@@ -1348,7 +1792,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="faq-item">
                     <button class="faq-question" type="button">
                         <span>How long does it take to install new service for a home or business?</span>
@@ -1360,7 +1803,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="faq-item">
                     <button class="faq-question" type="button">
                         <span>What should I have ready before requesting a telecom audit?</span>
@@ -1405,6 +1847,11 @@
                 <h4>Average Annual Savings Per Client</h4>
                 <div class="savings-amount">$1,368</div>
                 <p style="color:var(--gray);margin-top:0.5rem;">Plus 13x faster speeds and enterprise-grade reliability</p>
+            </div>
+            <!-- DISCLAIMER -->
+            <div class="results-disclaimer">
+                <div class="disclaimer-icon">i</div>
+                <p class="disclaimer-text"><strong>Pricing disclaimer:</strong> The results and savings figures shown above reflect <strong>shared fiber</strong> service plans. Dedicated fiber pricing varies based on location, bandwidth tier, contract terms, and installation requirements. Contact SpheraComm for a tailored quote specific to your needs.</p>
             </div>
         </div>
     </section>
@@ -1486,6 +1933,7 @@
         <a href="mailto:info@spheracomm.com" class="cta-button" style="font-size:1.05rem;padding:0.9rem 2.25rem;">Email Us at info@spheracomm.com</a>
     </section>
 
+    <!-- FOOTER -->
     <footer>
         <div class="footer-content">
             <div class="footer-brand">
@@ -1521,7 +1969,7 @@
     </footer>
 
     <script>
-    // ========== PARTICLES & DECORATION ==========
+    // PARTICLES
     const particlesContainer = document.getElementById('particles');
     for (let i = 0; i < 50; i++) {
         const p = document.createElement('div');
@@ -1532,6 +1980,7 @@
         particlesContainer.appendChild(p);
     }
 
+    // SPEED LINES
     const speedLinesContainer = document.getElementById('speedLines');
     for (let i = 0; i < 10; i++) {
         const l = document.createElement('div');
@@ -1542,13 +1991,13 @@
         speedLinesContainer.appendChild(l);
     }
 
-    // ========== NAV SCROLL ==========
+    // NAV SCROLL
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
         navbar.classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // ========== FADE IN OBSERVER ==========
+    // FADE IN OBSERVER
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -1572,17 +2021,18 @@
         });
     }
 
-    // ========== SMOOTH SCROLL ==========
+    // SMOOTH SCROLL
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
-            if (!href || href === '#') return; // skip bare # links
+            if (!href || href === '#') return;
             e.preventDefault();
             const target = document.querySelector(href);
             if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });
-    // ========== FAQ ACCORDION ==========
+
+    // FAQ ACCORDION
     const faqItems = document.querySelectorAll('.faq-item');
     faqItems.forEach((item) => {
         const trigger = item.querySelector('.faq-question');
@@ -1601,7 +2051,7 @@
         });
     });
 
-    // ========== INLINE FORMSPREE SUBMIT ==========
+    // CONTACT FORM
     const contactForm = document.getElementById('contactForm');
     const submitBtn = document.getElementById('submitBtn');
     const formMessage = document.getElementById('formMessage');
@@ -1616,24 +2066,18 @@
     contactForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!contactForm.reportValidity()) return;
-
         const originalText = btnText ? btnText.textContent : 'Schedule My Free Audit';
         if (submitBtn) submitBtn.disabled = true;
         if (btnText) btnText.textContent = 'Submitting...';
         showFormMessage('', '');
         formMessage.style.display = 'none';
-
         try {
             const response = await fetch(contactForm.action, {
                 method: 'POST',
                 body: new FormData(contactForm),
-                headers: {
-                    'Accept': 'application/json'
-                }
+                headers: { 'Accept': 'application/json' }
             });
-
             const data = await response.json().catch(() => ({}));
-
             if (response.ok) {
                 contactForm.reset();
                 showFormMessage('success', 'Audit request received. A SpheraComm specialist will reach out shortly.');
