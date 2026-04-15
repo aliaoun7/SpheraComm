@@ -1215,10 +1215,21 @@
         }
 
         .form-message.success {
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid var(--success);
-            color: var(--success);
+            background: linear-gradient(135deg, rgba(20, 184, 106, 0.15), rgba(20, 184, 106, 0.08));
+            border: 2px solid var(--success);
+            color: #065f46;
             display: block;
+            font-size: 1.05rem;
+            font-weight: 600;
+            padding: 1.25rem;
+            box-shadow: 0 4px 20px rgba(20, 184, 106, 0.2);
+            animation: successPulse 0.5s ease;
+        }
+
+        @keyframes successPulse {
+            0% { transform: scale(0.95); opacity: 0; }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .form-message.error {
@@ -1906,6 +1917,10 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label for="address">Business or Home Address *</label>
+                    <input type="text" id="address" name="address" required placeholder="123 Main St, City, State ZIP">
+                </div>
+                <div class="form-group">
                     <label for="currentProvider">Current Provider (Optional)</label>
                     <input type="text" id="currentProvider" name="currentProvider" placeholder="e.g., Comcast, AT&T, Verizon">
                 </div>
@@ -2058,11 +2073,11 @@
     const btnText = submitBtn?.querySelector('.btn-text');
 
     function showFormMessage(type, message) {
-    if (!formMessage) return;
-    formMessage.className = `form-message ${type}`;
-    formMessage.textContent = message;
-    formMessage.style.display = 'block'; // Force display to show the message
-}
+        if (!formMessage) return;
+        formMessage.className = `form-message ${type}`;
+        formMessage.textContent = message;
+        formMessage.style.display = 'block';
+    }
 
     contactForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
