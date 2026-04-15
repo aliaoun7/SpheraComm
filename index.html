@@ -2058,9 +2058,11 @@
     const btnText = submitBtn?.querySelector('.btn-text');
 
     function showFormMessage(type, message) {
-        if (!formMessage) return;
-        formMessage.className = `form-message ${type}`;
-        formMessage.textContent = message;
+    if (!formMessage) return;
+    formMessage.className = `form-message ${type}`;
+    formMessage.textContent = message;
+    formMessage.style.display = 'block'; // Force display to show the message
+}
     }
 
     contactForm?.addEventListener('submit', async (e) => {
@@ -2070,7 +2072,6 @@
         if (submitBtn) submitBtn.disabled = true;
         if (btnText) btnText.textContent = 'Submitting...';
         showFormMessage('', '');
-        formMessage.style.display = 'none';
         try {
             const response = await fetch(contactForm.action, {
                 method: 'POST',
@@ -2080,7 +2081,7 @@
             const data = await response.json().catch(() => ({}));
             if (response.ok) {
                 contactForm.reset();
-                showFormMessage('success', 'Audit request received. A SpheraComm specialist will reach out shortly.');
+                showFormMessage('success', '✓ Audit request received! A SpheraComm specialist will contact you within 24 hours.');
             } else {
                 const errorMessage = data?.errors?.map(err => err.message).join(' ') || 'There was a problem submitting your request. Please try again or email info@spheracomm.com.';
                 showFormMessage('error', errorMessage);
